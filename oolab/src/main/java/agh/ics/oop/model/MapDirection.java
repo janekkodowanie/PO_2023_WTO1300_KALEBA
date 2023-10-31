@@ -19,6 +19,11 @@ public enum MapDirection {
         return MapDirection.values()[(this.ordinal() + 1) % values().length];
     }
 
+    public MapDirection opposite() {
+        return MapDirection.values()[(this.ordinal() + values().length / 2) % values().length];
+    }
+
+
     public MapDirection previous() {
         return MapDirection.values()[(this.ordinal() + (values().length) - 1) % values().length];
     }

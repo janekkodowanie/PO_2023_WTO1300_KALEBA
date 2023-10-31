@@ -5,6 +5,8 @@ import agh.ics.oop.model.MapDirection;
 import agh.ics.oop.model.MoveDirection;
 import agh.ics.oop.model.Vector2D;
 
+import java.util.List;
+
 public class World {
     public static void main(String[] args) {
 
@@ -24,11 +26,18 @@ public class World {
         System.out.println(MapDirection.NORTH.next());
         System.out.println(MapDirection.NORTH.previous());
         System.out.println(MapDirection.NORTH.previous().previous());
-        System.out.println(MapDirection.NORTH.previous().previous().previous());
+
+
+        /* f b r l f f r r f f f f f f f f */
+        List<MoveDirection> directions = OptionsParser.parse(args);
+        List<Vector2D> positions = List.of(new Vector2D(2,2), new Vector2D(3,4));
+        Simulation simulation = new Simulation(directions, positions);
+        simulation.run();
+
     }
 
 
-    static void run(MoveDirection[] directions) {
+    static void run(List<MoveDirection> directions) {
         for(MoveDirection direction : directions) {
             switch (direction) {
                 case FORWARD -> System.out.println("Animal walks forward.");
