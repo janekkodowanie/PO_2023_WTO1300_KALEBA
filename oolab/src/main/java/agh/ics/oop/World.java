@@ -1,39 +1,23 @@
 package agh.ics.oop;
 
 
-import agh.ics.oop.model.MapDirection;
 import agh.ics.oop.model.MoveDirection;
+import agh.ics.oop.model.RectangularMap;
 import agh.ics.oop.model.Vector2D;
 
 import java.util.List;
 
 public class World {
+
     public static void main(String[] args) {
-
-        System.out.println("Start");
-
-        run(OptionsParser.parse(args));
-
-        System.out.println("Stop");
-
-        Vector2D position1 = new Vector2D(1,2);
-        System.out.println(position1);
-        Vector2D position2 = new Vector2D(-2,1);
-        System.out.println(position2);
-        System.out.println(position1.add(position2));
-
-        System.out.println(MapDirection.NORTH);
-        System.out.println(MapDirection.NORTH.next());
-        System.out.println(MapDirection.NORTH.previous());
-        System.out.println(MapDirection.NORTH.previous().previous());
-
 
         /* f b r l f f r r f f f f f f f f */
         List<MoveDirection> directions = OptionsParser.parse(args);
         List<Vector2D> positions = List.of(new Vector2D(2,2), new Vector2D(3,4));
-        Simulation simulation = new Simulation(directions, positions);
-        simulation.run();
 
+        RectangularMap rectangularMap = new RectangularMap(5, 5);
+        Simulation simulation = new Simulation(directions, positions, rectangularMap);
+        simulation.run();
     }
 
 
