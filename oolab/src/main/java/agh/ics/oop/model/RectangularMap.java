@@ -63,11 +63,11 @@ public class RectangularMap implements WorldMap<Animal, Vector2D> {
         return Collections.unmodifiableMap(animalMap);
     }
 
-    Vector2D getLeftLowerCorner() {
+    public Vector2D getLeftLowerCorner() {
         return leftLowerCorner;
     }
 
-    Vector2D getRightUpperCorner() {
+    public Vector2D getRightUpperCorner() {
         return rightUpperCorner;
     }
 }

@@ -26,8 +26,8 @@ public class Simulation {
 
         MapVisualizer visualizer = new MapVisualizer(this.worldMap);
 
-        Vector2D lowerLeft = this.animals.get(0).getPosition();
-        Vector2D upperRight = this.animals.get(0).getPosition();
+        Vector2D lowerLeft = this.worldMap.getLeftLowerCorner();
+        Vector2D upperRight = this.worldMap.getRightUpperCorner();
 
         System.out.println(visualizer.draw(lowerLeft, upperRight));
 

@@ -15,6 +15,17 @@ public enum MapDirection {
         };
     }
 
+    public static MapDirection initialToObject(String initial) {
+        return switch (initial) {
+            case "N" ->  NORTH;
+            case "S" ->  SOUTH;
+            case "E" ->  EAST;
+            case "W" ->  WEST;
+            default -> throw new IllegalArgumentException("Invalid shortcut");
+        };
+    }
+
+
     public MapDirection next() {
         return MapDirection.values()[(this.ordinal() + 1) % values().length];
     }

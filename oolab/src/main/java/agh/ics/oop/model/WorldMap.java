@@ -6,7 +6,8 @@ package agh.ics.oop.model;
  *
  * @author apohllo, idzik
  */
-public interface WorldMap<T, P> extends MoveValidator {
+public interface WorldMap<T, P> extends MoveValidator<P> {
+
 
     /**
      * Place a T object on the map.
@@ -37,4 +38,10 @@ public interface WorldMap<T, P> extends MoveValidator {
      * @return animal or null if the position is not occupied.
      */
     T objectAt(P position);
+
+
+    P getLeftLowerCorner();
+    P getRightUpperCorner();
+
+
 }

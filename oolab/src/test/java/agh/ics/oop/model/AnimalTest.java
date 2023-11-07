@@ -24,7 +24,7 @@ class AnimalTest {
 
         /* Creating instance of anonymous class
         * that implements MoveValidator interface. */
-        MoveValidator validator = new MoveValidator() {
+        MoveValidator<Vector2D> validator = new MoveValidator<>() {
             @Override
             public boolean canMoveTo(Vector2D position) {
                 return position.precedes(new Vector2D(4, 4))

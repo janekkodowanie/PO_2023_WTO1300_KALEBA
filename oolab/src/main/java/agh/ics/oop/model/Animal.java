@@ -23,7 +23,7 @@ public class Animal {
         return this.position.equals(position);
     }
 
-    boolean move(MoveValidator validator, MoveDirection direction){
+    boolean move(MoveValidator<Vector2D> validator, MoveDirection direction){
         Vector2D oldPosition = this.position;
         MapDirection orientation = this.orientation;
 
