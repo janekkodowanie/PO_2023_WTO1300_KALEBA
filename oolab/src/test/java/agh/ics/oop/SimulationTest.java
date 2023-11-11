@@ -1,10 +1,8 @@
-package src.test.java.agh.ics.oop;
+package agh.ics.oop;
 
-import agh.ics.oop.OptionsParser;
-import agh.ics.oop.Simulation;
-import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.MapDirection;
 import agh.ics.oop.model.MoveDirection;
+import agh.ics.oop.model.RectangularMap;
 import agh.ics.oop.model.Vector2D;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +21,10 @@ public class SimulationTest {
         List<Vector2D> positions = List.of(
                 new Vector2D(2,2), new Vector2D(3,4)
         );
-        Simulation simulation = new Simulation(directionsVertically, positions);
+
+        RectangularMap rectangularMap = new RectangularMap(10, 5);
+
+        Simulation simulation = new Simulation(directionsVertically, positions, rectangularMap);
 
         /* When */
         simulation.run();
@@ -40,7 +41,7 @@ public class SimulationTest {
                 MoveDirection.RIGHT, MoveDirection.LEFT);
 
         /* When */
-        simulation = new Simulation(directionsHorizontally, positions);
+        simulation = new Simulation(directionsHorizontally, positions, rectangularMap);
         simulation.run();
 
         /* Then */

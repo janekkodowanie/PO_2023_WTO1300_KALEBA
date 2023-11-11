@@ -8,12 +8,23 @@ public enum MapDirection {
 
     public String toString() {
         return switch (this) {
-            case NORTH ->  "Północ";
-            case SOUTH ->  "Południe";
-            case WEST ->  "Zachód";
-            case EAST ->  "Wschód";
+            case NORTH ->  "NORTH";
+            case SOUTH ->  "SOUTH";
+            case WEST ->  "WEST";
+            case EAST ->  "EAST";
         };
     }
+
+    public static MapDirection initialToObject(String initial) {
+        return switch (initial) {
+            case "N" ->  NORTH;
+            case "S" ->  SOUTH;
+            case "E" ->  EAST;
+            case "W" ->  WEST;
+            default -> throw new IllegalArgumentException("Invalid shortcut");
+        };
+    }
+
 
     public MapDirection next() {
         return MapDirection.values()[(this.ordinal() + 1) % values().length];

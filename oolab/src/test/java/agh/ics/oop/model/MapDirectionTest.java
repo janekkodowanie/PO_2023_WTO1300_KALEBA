@@ -1,6 +1,5 @@
-package src.test.java.agh.ics.oop.model;
+package agh.ics.oop.model;
 
-import agh.ics.oop.model.MapDirection;
 import org.junit.jupiter.api.Test;
 
 import static agh.ics.oop.model.MapDirection.*;
