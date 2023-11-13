@@ -21,20 +21,17 @@ public abstract class AbstractWorldMap implements WorldMap<WorldElement, Vector2
     @Override
     public boolean place(WorldElement worldElement) {
 
-        if (!(worldElement instanceof Animal animal)) {
-            throw new IllegalArgumentException("Only animals can be placed on the rectangular map.");
-        }
+        if (worldElement instanceof Animal animal) {
+            Vector2D position = animal.getPosition();
+            if (this.canMoveTo(position)) {
+                animalMap.put(position, animal);
 
-        Vector2D position = animal.getPosition();
-        if (this.canMoveTo(position)) {
-            animalMap.put(position, animal);
-
-            return true;
+                return true;
+            }
         }
 
         return false;
     }
-
 
     @Override
     public WorldElement objectAt(Vector2D position) {
@@ -48,9 +45,8 @@ public abstract class AbstractWorldMap implements WorldMap<WorldElement, Vector2
                 && !this.isOccupied(newPosition);
     }
 
-
     @Override
-    public void move(WorldElement element, MoveDirection direction) {
+    public boolean move(WorldElement element, MoveDirection direction) {
 
         if (!(element instanceof Animal animal)) {
             throw new IllegalArgumentException("Only animals can be moved on the map.");
@@ -58,12 +54,14 @@ public abstract class AbstractWorldMap implements WorldMap<WorldElement, Vector2
 
         Vector2D oldPosition = animal.getPosition();
 
-        boolean moved = animal.move(this, direction);
 
-        if (moved) {
+        if (animal.move(this, direction)) {
             this.animalMap.remove(oldPosition);
             this.animalMap.put(animal.getPosition(), animal);
+            return true;
         }
+
+        return false;
     }
 
     @Override
@@ -80,9 +78,4 @@ public abstract class AbstractWorldMap implements WorldMap<WorldElement, Vector2
     public Vector2D getRightUpperCorner() {
         return rightUpperCorner;
     }
-
-
-
-
-
 }

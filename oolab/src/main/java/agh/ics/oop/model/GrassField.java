@@ -49,7 +49,8 @@ public class GrassField extends AbstractWorldMap {
                     .map(Grass::new)
                     .orElseThrow();
 
-            place(grass);
+            grassMap.put(grass.getPosition(), grass);
+            updateVisibleCorners(grass.getPosition());
         }
     }
 
@@ -59,16 +60,49 @@ public class GrassField extends AbstractWorldMap {
         if (super.place(object)) {
             /* If no such key in grassMap found, grass.remove(...) returns null -> no exception. */
             grassMap.remove(object.getPosition());
-            updateVisibleCorners(object.getPosition());
-            return true;
+            return updateGrassField(object.getPosition());
+        }
+        else if (object instanceof Grass grass && isOccupied(grass.getPosition())) {
+            grassMap.put(grass.getPosition(), grass);
+            return updateGrassField(grass.getPosition());
         }
 
         return false;
     }
 
+
+    private boolean updateGrassField(Vector2D position) {
+        updateVisibleCorners(position);
+        return true;
+    }
+    private boolean removeGrass(Vector2D position) {
+        grassMap.remove(position);
+        return true;
+    }
+
+    @Override
+    public boolean move(WorldElement element, MoveDirection direction) {
+        /* After super.move() element.getPosition() returns it's new Position. */
+        return super.move(element, direction)
+                && this.updateGrassField(element.getPosition())
+                && this.removeGrass(element.getPosition());
+    }
+
+    @Override
+    public boolean canMoveTo(Vector2D newPosition) {
+        return newPosition.follows(leftLowerCorner)
+                && newPosition.precedes(rightUpperCorner)
+                && !isOccupiedByAnimal(newPosition);
+    }
+
+
     @Override
     public boolean isOccupied(Vector2D position) {
         return super.isOccupied(position) || grassMap.containsKey(position);
+    }
+
+    public boolean isOccupiedByAnimal(Vector2D position) {
+        return super.isOccupied(position);
     }
 
     @Override

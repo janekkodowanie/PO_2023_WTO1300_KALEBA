@@ -30,7 +30,6 @@ public class Simulation {
     }
 
 
-
     public void run() {
         this.animals.forEach(this.worldMap::place);
 
