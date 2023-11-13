@@ -19,9 +19,7 @@ public class SimulationTest {
                 new Vector2D(2,2), new Vector2D(3,4)
         );
 
-        WorldMap<Animal, Vector2D> rectangularMap = new RectangularMap(10, 5);
-
-        Simulation simulation = new Simulation(directionsVertically, positions, rectangularMap);
+        Simulation simulation = new Simulation(directionsVertically, positions, 10);
 
         /* When */
         simulation.run();
@@ -38,7 +36,7 @@ public class SimulationTest {
                 MoveDirection.RIGHT, MoveDirection.LEFT);
 
         /* When */
-        simulation = new Simulation(directionsHorizontally, positions, rectangularMap);
+        simulation = new Simulation(directionsHorizontally, positions, 10);
         simulation.run();
 
         /* Then */

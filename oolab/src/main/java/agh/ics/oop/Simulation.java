@@ -10,13 +10,26 @@ public class Simulation {
 
     private final List<MoveDirection> moves;
 
-    private final WorldMap<WorldElement, Vector2D> worldMap;
+    private WorldMap<WorldElement, Vector2D> worldMap;
 
-    public Simulation(List<MoveDirection> moves, List<Vector2D> positions) {
+    private Simulation(List<MoveDirection> moves, List<Vector2D> positions) {
         this.animals = positions.stream().map(Animal::new).toList();
         this.moves = moves;
-        this.worldMap = new GrassField(10);
     }
+
+    public Simulation(List<MoveDirection> moves, List<Vector2D> positions, int grassNumber) {
+        this(moves, positions);
+
+        this.worldMap = new GrassField(grassNumber);
+    }
+
+
+    public Simulation(List<MoveDirection> moves, List<Vector2D> positions, int width, int height) {
+        this(moves, positions);
+        this.worldMap = new RectangularMap(width, height);
+    }
+
+
 
     public void run() {
         this.animals.forEach(this.worldMap::place);

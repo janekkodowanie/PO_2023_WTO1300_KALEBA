@@ -15,7 +15,7 @@ public class World {
         List<MoveDirection> directions = OptionsParser.parse(args);
         List<Vector2D> positions = List.of(new Vector2D(2,2), new Vector2D(3,4));
 
-        Simulation simulation = new Simulation(directions, positions);
+        Simulation simulation = new Simulation(directions, positions, 10);
         simulation.run();
     }
 
