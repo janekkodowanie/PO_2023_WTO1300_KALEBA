@@ -1,7 +1,7 @@
 package agh.ics.oop;
 
-import agh.ics.oop.model.Animal;
 import agh.ics.oop.model.Vector2D;
+import agh.ics.oop.model.WorldElement;
 import agh.ics.oop.model.WorldMap;
 
 /**
@@ -14,14 +14,14 @@ public class MapVisualizer {
     private static final String EMPTY_CELL = " ";
     private static final String FRAME_SEGMENT = "-";
     private static final String CELL_SEGMENT = "|";
-    private final WorldMap<Animal, Vector2D> map;
+    private final WorldMap<WorldElement, Vector2D> map;
 
     /**
      * Initializes the MapVisualizer with an instance of map to visualize.
      * @param map
      */
     
-    public MapVisualizer(WorldMap<Animal, Vector2D> map) {
+    public MapVisualizer(WorldMap<WorldElement, Vector2D> map) {
         this.map = map;
     }
 
