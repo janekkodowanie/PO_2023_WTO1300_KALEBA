@@ -1,5 +1,7 @@
 package agh.ics.oop.model;
 
+import java.util.List;
+
 /**
  * The interface responsible for interacting with the map of the world.
  * Assumes that Vector2D and MoveDirection classes are defined.
@@ -39,9 +41,9 @@ public interface WorldMap<T, P> extends MoveValidator<P> {
      */
     WorldElement objectAt(P position);
 
-
     P getLeftLowerCorner();
     P getRightUpperCorner();
 
+    List<WorldElement> getElements();
 
 }

@@ -5,8 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-public class SimulationTest {
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+public class SimulationTest {
 
     @Test
     public void run() {
@@ -45,4 +46,21 @@ public class SimulationTest {
         assert simulation.getAnimals().get(1).getPosition().equals(new Vector2D(3,4));
         assert simulation.getAnimals().get(1).getOrientation().equals(MapDirection.WEST);
     }
+
+    @Test
+    public void runWithNoAnimals() {
+
+        List<MoveDirection> directionsVertically = List.of(
+                MoveDirection.FORWARD, MoveDirection.BACKWARD);
+
+        List<Vector2D> positions = List.of(
+                new Vector2D(-1,-1), new Vector2D(-1,-1)
+        );
+
+        Simulation simulation = new Simulation(directionsVertically, positions, 4, 4);
+
+        assertThrows(IllegalStateException.class, simulation::run);
+
+    }
+
 }

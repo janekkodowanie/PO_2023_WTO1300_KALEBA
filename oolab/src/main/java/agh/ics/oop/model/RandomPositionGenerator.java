@@ -19,6 +19,7 @@ public class RandomPositionGenerator implements Iterable<Vector2D>, Iterator<Vec
                 .flatMap(i -> IntStream.range(0, width).mapToObj(j -> new Vector2D(j, i)))
                 .collect(Collectors.toList());
 
+
         /* Fisher-Yates shuffle */
         Collections.shuffle(positions, new Random());
 

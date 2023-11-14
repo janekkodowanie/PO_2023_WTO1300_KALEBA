@@ -1,6 +1,8 @@
 package agh.ics.oop.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public abstract class AbstractWorldMap implements WorldMap<WorldElement, Vector2D> {
@@ -78,4 +80,10 @@ public abstract class AbstractWorldMap implements WorldMap<WorldElement, Vector2
     public Vector2D getRightUpperCorner() {
         return rightUpperCorner;
     }
+
+    @Override
+    public List<WorldElement> getElements() {
+        return new ArrayList<>(animalMap.values());
+    }
+
 }

@@ -31,12 +31,12 @@ public class Simulation {
 
 
     public void run() {
+
         this.animals.forEach(this.worldMap::place);
 
-        if (this.animals.isEmpty()) {
+        if (this.worldMap.getElements().stream().noneMatch(element -> element instanceof Animal)) {
             throw new IllegalStateException("There is no animals to simulate!");
         }
-
 
         MapVisualizer visualizer = new MapVisualizer(this.worldMap);
 

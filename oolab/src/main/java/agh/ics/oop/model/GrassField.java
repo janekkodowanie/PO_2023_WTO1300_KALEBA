@@ -1,6 +1,8 @@
 package agh.ics.oop.model;
 
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GrassField extends AbstractWorldMap {
@@ -31,7 +33,6 @@ public class GrassField extends AbstractWorldMap {
         return (int) Math.sqrt(10 * N) + 1;
     }
 
-
     private void updateVisibleCorners(Vector2D position) {
 
         this.dynamicLeftLowerCorner = new Vector2D(
@@ -43,7 +44,7 @@ public class GrassField extends AbstractWorldMap {
                 Math.max(this.dynamicRightUpperCorner.getY(), position.getY()));
     }
 
-    public void placeGrass(int bounds) {
+    private void placeGrass(int bounds) {
 
         RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(bounds, bounds, N);
         for(Vector2D grassPosition : randomPositionGenerator) {
@@ -51,7 +52,6 @@ public class GrassField extends AbstractWorldMap {
             updateGrassField(grassPosition);
         }
     }
-
 
     @Override
     public boolean place(WorldElement object) {
@@ -61,14 +61,13 @@ public class GrassField extends AbstractWorldMap {
             grassMap.remove(object.getPosition());
             return updateGrassField(object.getPosition());
         }
-        else if (object instanceof Grass grass && isOccupied(grass.getPosition())) {
+        else if (object instanceof Grass grass && !isOccupied(grass.getPosition())) {
             grassMap.put(grass.getPosition(), grass);
             return updateGrassField(grass.getPosition());
         }
 
         return false;
     }
-
 
     private boolean updateGrassField(Vector2D position) {
         updateVisibleCorners(position);
@@ -94,13 +93,12 @@ public class GrassField extends AbstractWorldMap {
                 && !isOccupiedByAnimal(newPosition);
     }
 
-
     @Override
     public boolean isOccupied(Vector2D position) {
         return super.isOccupied(position) || grassMap.containsKey(position);
     }
 
-    public boolean isOccupiedByAnimal(Vector2D position) {
+    private boolean isOccupiedByAnimal(Vector2D position) {
         return super.isOccupied(position);
     }
 
@@ -119,4 +117,12 @@ public class GrassField extends AbstractWorldMap {
     public Vector2D getRightUpperCorner() {
         return this.dynamicRightUpperCorner;
     }
+
+    @Override
+    public List<WorldElement> getElements() {
+        List<WorldElement> elements = super.getElements();
+        elements.addAll(grassMap.values());
+        return Collections.unmodifiableList(elements);
+    }
+
 }

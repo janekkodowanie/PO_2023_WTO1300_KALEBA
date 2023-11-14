@@ -140,4 +140,26 @@ class RectangularMapTest {
         assertTrue(map.isOccupied(leftLowerCorner));
         assertEquals(map.getAnimalMap().get(leftLowerCorner), leftLowerCornerAnimal);
     }
+
+    @Test
+    public void getElements() {
+
+        /* Given */
+        GrassField grassField = new GrassField(0);
+        Animal animal = new Animal(new Vector2D(2,2));
+        Animal animal2 = new Animal(new Vector2D(3,3));
+        Animal animal3 = new Animal(new Vector2D(100,100));
+
+        /* When */
+        grassField.place(animal);
+        grassField.place(animal2);
+        grassField.place(animal3);
+
+        /* Then */
+        assertEquals(3, grassField.getElements().size());
+        assertTrue(grassField.getElements().contains(animal));
+        assertTrue(grassField.getElements().contains(animal2));
+        assertTrue(grassField.getElements().contains(animal3));
+    }
+
 }
