@@ -20,7 +20,8 @@ public class SimulationTest {
                 new Vector2D(2,2), new Vector2D(3,4)
         );
 
-        Simulation simulation = new Simulation(directionsVertically, positions, 10);
+        WorldMap<WorldElement, Vector2D> map = new GrassField(10);
+        Simulation simulation = new Simulation(positions, directionsVertically, map);
 
         /* When */
         simulation.run();
@@ -37,7 +38,8 @@ public class SimulationTest {
                 MoveDirection.RIGHT, MoveDirection.LEFT);
 
         /* When */
-        simulation = new Simulation(directionsHorizontally, positions, 10);
+        map = new GrassField(10);
+        simulation = new Simulation(positions, directionsHorizontally, map);
         simulation.run();
 
         /* Then */
@@ -57,10 +59,9 @@ public class SimulationTest {
                 new Vector2D(-1,-1), new Vector2D(-1,-1)
         );
 
-        Simulation simulation = new Simulation(directionsVertically, positions, 4, 4);
+        Simulation simulation = new Simulation(positions, directionsVertically, new RectangularMap(4, 4));
 
         assertThrows(IllegalStateException.class, simulation::run);
-
     }
 
 }

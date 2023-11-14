@@ -1,28 +1,31 @@
 package agh.ics.oop.model;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class GrassField extends AbstractWorldMap {
     
-    private final int N;
+    private final int grassNumber;
     private final Map<Vector2D, Grass> grassMap;
 
+    /* dynamicLeftLowerCorner & dynamicRightUpperCorner ->
+    * visualisation purpose bounds dynamically updated to
+    * cover all elements placed on the map. */
     private Vector2D dynamicLeftLowerCorner;
     private Vector2D dynamicRightUpperCorner;
 
 
-    public GrassField(int numberOfGrass) {
+    public GrassField(int grassNumber) {
 
-        super(Integer.MAX_VALUE, Integer.MAX_VALUE, 0);
+        super(new Vector2D(Integer.MIN_VALUE, Integer.MIN_VALUE),
+                new Vector2D(Integer.MAX_VALUE, Integer.MAX_VALUE), 0);
 
-        this.N = numberOfGrass;
+        this.grassNumber = grassNumber;
         this.dynamicRightUpperCorner = super.getLeftLowerCorner();
         this.dynamicLeftLowerCorner = super.getRightUpperCorner();
 
-        grassMap = new HashMap<>(numberOfGrass);
+        grassMap = new HashMap<>(grassNumber);
 
         this.placeGrass(getGrassBounds());
     }
@@ -30,23 +33,18 @@ public class GrassField extends AbstractWorldMap {
     private int getGrassBounds() {
 
         /* (0, 0) - (sqrt(n*10), sqrt(n*10)) -> I assume inclusive range edges. */
-        return (int) Math.sqrt(10 * N) + 1;
+        return (int) Math.sqrt(10 * grassNumber) + 1;
     }
 
     private void updateVisibleCorners(Vector2D position) {
 
-        this.dynamicLeftLowerCorner = new Vector2D(
-                Math.min(this.dynamicLeftLowerCorner.getX(), position.getX()),
-                Math.min(this.dynamicLeftLowerCorner.getY(), position.getY()));
-
-        this.dynamicRightUpperCorner = new Vector2D(
-                Math.max(this.dynamicRightUpperCorner.getX(), position.getX()),
-                Math.max(this.dynamicRightUpperCorner.getY(), position.getY()));
+        this.dynamicLeftLowerCorner = position.lowerLeft(this.dynamicLeftLowerCorner);
+        this.dynamicRightUpperCorner = position.upperRight(this.dynamicRightUpperCorner);
     }
 
     private void placeGrass(int bounds) {
 
-        RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(bounds, bounds, N);
+        RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(bounds, bounds, grassNumber);
         for(Vector2D grassPosition : randomPositionGenerator) {
             grassMap.put(grassPosition, new Grass(grassPosition));
             updateGrassField(grassPosition);
@@ -122,7 +120,7 @@ public class GrassField extends AbstractWorldMap {
     public List<WorldElement> getElements() {
         List<WorldElement> elements = super.getElements();
         elements.addAll(grassMap.values());
-        return Collections.unmodifiableList(elements);
+        return elements;
     }
 
 }

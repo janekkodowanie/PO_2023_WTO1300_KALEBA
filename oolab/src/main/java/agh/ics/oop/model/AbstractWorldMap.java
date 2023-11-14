@@ -7,15 +7,15 @@ import java.util.Map;
 
 public abstract class AbstractWorldMap implements WorldMap<WorldElement, Vector2D> {
 
+    /* leftLowerCorner & rightUpperCorner -> map bounds.*/
     protected final Vector2D leftLowerCorner;
     protected final Vector2D rightUpperCorner;
-
     protected final Map<Vector2D, Animal> animalMap;
 
 
-    protected AbstractWorldMap(int xMax, int yMax, int initialCapacity) {
-        leftLowerCorner = new Vector2D(0,0);
-        rightUpperCorner = new Vector2D(xMax, yMax);
+    protected AbstractWorldMap(Vector2D leftLowerCorner, Vector2D rightUpperCorner, int initialCapacity) {
+        this.leftLowerCorner = leftLowerCorner;
+        this.rightUpperCorner = rightUpperCorner;
 
         animalMap = new HashMap<>(initialCapacity);
     }
@@ -55,7 +55,6 @@ public abstract class AbstractWorldMap implements WorldMap<WorldElement, Vector2
         }
 
         Vector2D oldPosition = animal.getPosition();
-
 
         if (animal.move(this, direction)) {
             this.animalMap.remove(oldPosition);
