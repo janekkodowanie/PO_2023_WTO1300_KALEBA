@@ -2,8 +2,6 @@ package agh.ics.oop.model;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
-import java.util.stream.Stream;
 
 public class GrassField extends AbstractWorldMap {
     
@@ -24,8 +22,15 @@ public class GrassField extends AbstractWorldMap {
 
         grassMap = new HashMap<>(numberOfGrass);
 
-        this.placeGrass();
+        this.placeGrass(getGrassBounds());
     }
+
+    private int getGrassBounds() {
+
+        /* (0, 0) - (sqrt(n*10), sqrt(n*10)) -> I assume inclusive range edges. */
+        return (int) Math.sqrt(10 * N) + 1;
+    }
+
 
     private void updateVisibleCorners(Vector2D position) {
 
@@ -38,21 +43,15 @@ public class GrassField extends AbstractWorldMap {
                 Math.max(this.dynamicRightUpperCorner.getY(), position.getY()));
     }
 
-    public void placeGrass() {
-        Random random = new Random();
-        int bound = (int) Math.sqrt(10 * N);
+    public void placeGrass(int bounds) {
 
-        for (int i = 0; i < N; i++) {
-            Grass grass = Stream.generate(() -> new Vector2D(random.nextInt(bound), random.nextInt(bound)))
-                    .filter(position -> !this.isOccupied(position))
-                    .findFirst()
-                    .map(Grass::new)
-                    .orElseThrow();
-
-            grassMap.put(grass.getPosition(), grass);
-            updateVisibleCorners(grass.getPosition());
+        RandomPositionGenerator randomPositionGenerator = new RandomPositionGenerator(bounds, bounds, N);
+        for(Vector2D grassPosition : randomPositionGenerator) {
+            grassMap.put(grassPosition, new Grass(grassPosition));
+            updateGrassField(grassPosition);
         }
     }
+
 
     @Override
     public boolean place(WorldElement object) {
