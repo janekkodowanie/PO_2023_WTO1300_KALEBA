@@ -13,15 +13,14 @@ public interface WorldMap<T, P> extends MoveValidator<P> {
 
     /**
      * Place a T object on the map.
-     * @return True if the object was placed. The animal cannot be placed if the move is not valid.
      */
-    boolean place(T object);
+    void place(T object);
 
     /**
      * Moves an animal (if it is present on the map) according to specified direction.
      * If the move is not possible, this method has no effect.
      */
-    boolean move(T object, MoveDirection direction);
+    void move(T object, MoveDirection direction);
 
     /**
      * Return true if given position on the map is occupied. Should not be
@@ -41,9 +40,12 @@ public interface WorldMap<T, P> extends MoveValidator<P> {
      */
     WorldElement objectAt(P position);
 
-    P getLeftLowerCorner();
-    P getRightUpperCorner();
-
     List<WorldElement> getElements();
+
+    Boundary getCurrentBounds();
+
+    void registerObserver(MapChangeListener observer);
+    void removeObserver(MapChangeListener observer);
+
 
 }

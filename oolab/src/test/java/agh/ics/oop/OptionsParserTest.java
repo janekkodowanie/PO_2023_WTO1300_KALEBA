@@ -1,12 +1,12 @@
-package src.test.java.agh.ics.oop;
+package agh.ics.oop;
 
-import agh.ics.oop.OptionsParser;
 import agh.ics.oop.model.MoveDirection;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class OptionsParserTest {
 
@@ -34,6 +34,8 @@ class OptionsParserTest {
         for(int i = 0; i < args.length; i++) {
             assertEquals(directions.get(i), expectedDirections.get(i % 4));
         }
+
+        assertThrows(IllegalArgumentException.class, () -> OptionsParser.parse(new String[] {"a"}));
     }
 
     @Test

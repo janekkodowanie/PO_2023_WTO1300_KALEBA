@@ -19,15 +19,15 @@ class GrassFieldTest {
         GrassField grassField = new GrassField(N);
         MapVisualizer visualizer = new MapVisualizer(grassField);
 
-        String mapPicture = visualizer.draw(grassField.getLeftLowerCorner(), grassField.getRightUpperCorner());
+        String mapPicture = visualizer.draw(grassField.getCurrentBounds().leftLowerCorner(), grassField.getCurrentBounds().rightUpperCorner());
 
         long grasses = mapPicture.chars().filter(character -> character == '*').count();
 
         /* Then */
-        assertTrue(maxPossibleIdx >= grassField.getRightUpperCorner().getX());
-        assertTrue(maxPossibleIdx >= grassField.getRightUpperCorner().getY());
-        assertTrue(minPossibleIdx <= grassField.getLeftLowerCorner().getX());
-        assertTrue(minPossibleIdx <= grassField.getLeftLowerCorner().getY());
+        assertTrue(maxPossibleIdx >= grassField.getCurrentBounds().rightUpperCorner().getX());
+        assertTrue(maxPossibleIdx >= grassField.getCurrentBounds().rightUpperCorner().getY());
+        assertTrue(minPossibleIdx <= grassField.getCurrentBounds().leftLowerCorner().getX());
+        assertTrue(minPossibleIdx <= grassField.getCurrentBounds().leftLowerCorner().getY());
         assertEquals(N, grasses);
     }
 
@@ -50,12 +50,12 @@ class GrassFieldTest {
 
         /* Then */
         assertEquals(animalTrue, grassField.objectAt(new Vector2D(2,2)));
-        assertFalse(grassField.place(grassFalse));
+        grassField.place(grassFalse);
 
         assertTrue(grassField.isOccupied(new Vector2D(3,3)));
 
-        assertTrue(grassField.place(animalTrueOverGrass));
-        assertTrue(grassField.place(highCoords));
+        grassField.place(animalTrueOverGrass);
+        grassField.place(highCoords);
 
         assertTrue(grassField.isOccupied(new Vector2D(2,2)));
         assertTrue(grassField.isOccupied(new Vector2D(3,3)));
@@ -80,12 +80,12 @@ class GrassFieldTest {
         grassField.place(animal3);
 
         /* Then */
-        assertEquals(new Vector2D(2,2), grassField.getLeftLowerCorner());
-        assertEquals(new Vector2D(100,100), grassField.getRightUpperCorner());
+        assertEquals(new Vector2D(2,2), grassField.getCurrentBounds().leftLowerCorner());
+        assertEquals(new Vector2D(100,100), grassField.getCurrentBounds().rightUpperCorner());
 
         grassField.place(grass);
-        assertEquals(new Vector2D(1,1), grassField.getLeftLowerCorner());
-        assertEquals(new Vector2D(100,100), grassField.getRightUpperCorner());
+        assertEquals(new Vector2D(1,1), grassField.getCurrentBounds().leftLowerCorner());
+        assertEquals(new Vector2D(100,100), grassField.getCurrentBounds().rightUpperCorner());
     }
 
 

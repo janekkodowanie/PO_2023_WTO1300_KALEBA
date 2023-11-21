@@ -26,24 +26,11 @@ public class Simulation {
             throw new IllegalStateException("There is no animals to simulate!");
         }
 
-        MapVisualizer visualizer = new MapVisualizer(this.worldMap);
-
-        Vector2D upperRight = this.worldMap.getRightUpperCorner();
-        Vector2D lowerLeft = this.worldMap.getLeftLowerCorner();
-
-        System.out.println(visualizer.draw(lowerLeft, upperRight));
-
         for (int i = 0; i < this.moves.size(); i++) {
-
             Animal animal = this.animals.get(i % this.animals.size());
             MoveDirection direction = this.moves.get(i);
 
             this.worldMap.move(animal, direction);
-
-            upperRight = this.worldMap.getRightUpperCorner();
-            lowerLeft = this.worldMap.getLeftLowerCorner();
-
-            System.out.println(visualizer.draw(lowerLeft, upperRight));
         }
     }
 
