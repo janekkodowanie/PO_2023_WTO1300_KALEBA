@@ -1,6 +1,8 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.MapVisualizer;
+import agh.ics.oop.exceptions.PositionNotAvailableException;
+import agh.ics.oop.exceptions.PositionOutOfBoundsException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,24 +21,24 @@ class GrassFieldTest {
         GrassField grassField = new GrassField(N);
         MapVisualizer visualizer = new MapVisualizer(grassField);
 
-        String mapPicture = visualizer.draw(grassField.getLeftLowerCorner(), grassField.getRightUpperCorner());
+        String mapPicture = visualizer.draw(grassField.getCurrentBounds().leftLowerCorner(), grassField.getCurrentBounds().rightUpperCorner());
 
         long grasses = mapPicture.chars().filter(character -> character == '*').count();
 
         /* Then */
-        assertTrue(maxPossibleIdx >= grassField.getRightUpperCorner().getX());
-        assertTrue(maxPossibleIdx >= grassField.getRightUpperCorner().getY());
-        assertTrue(minPossibleIdx <= grassField.getLeftLowerCorner().getX());
-        assertTrue(minPossibleIdx <= grassField.getLeftLowerCorner().getY());
+        assertTrue(maxPossibleIdx >= grassField.getCurrentBounds().rightUpperCorner().getX());
+        assertTrue(maxPossibleIdx >= grassField.getCurrentBounds().rightUpperCorner().getY());
+        assertTrue(minPossibleIdx <= grassField.getCurrentBounds().leftLowerCorner().getX());
+        assertTrue(minPossibleIdx <= grassField.getCurrentBounds().leftLowerCorner().getY());
         assertEquals(N, grasses);
     }
 
 
     @Test
-    public void place() {
+    public void place() throws PositionNotAvailableException, PositionOutOfBoundsException {
 
         /* Given */
-        GrassField grassField = new GrassField(10);
+        GrassField grassField = new GrassField(0);
         Animal animalTrue = new Animal(new Vector2D(2,2));
         Animal highCoords = new Animal(new Vector2D(100,100));
 
@@ -50,12 +52,12 @@ class GrassFieldTest {
 
         /* Then */
         assertEquals(animalTrue, grassField.objectAt(new Vector2D(2,2)));
-        assertFalse(grassField.place(grassFalse));
+        assertThrows(PositionNotAvailableException.class, () -> grassField.place(grassFalse));
 
         assertTrue(grassField.isOccupied(new Vector2D(3,3)));
 
-        assertTrue(grassField.place(animalTrueOverGrass));
-        assertTrue(grassField.place(highCoords));
+        grassField.place(animalTrueOverGrass);
+        grassField.place(highCoords);
 
         assertTrue(grassField.isOccupied(new Vector2D(2,2)));
         assertTrue(grassField.isOccupied(new Vector2D(3,3)));
@@ -64,7 +66,7 @@ class GrassFieldTest {
 
 
     @Test
-    public void updateVisibleCorners() {
+    public void updateVisibleCorners() throws PositionNotAvailableException, PositionOutOfBoundsException {
 
         /* Given */
         GrassField grassField = new GrassField(0);
@@ -80,17 +82,17 @@ class GrassFieldTest {
         grassField.place(animal3);
 
         /* Then */
-        assertEquals(new Vector2D(2,2), grassField.getLeftLowerCorner());
-        assertEquals(new Vector2D(100,100), grassField.getRightUpperCorner());
+        assertEquals(new Vector2D(2,2), grassField.getCurrentBounds().leftLowerCorner());
+        assertEquals(new Vector2D(100,100), grassField.getCurrentBounds().rightUpperCorner());
 
         grassField.place(grass);
-        assertEquals(new Vector2D(1,1), grassField.getLeftLowerCorner());
-        assertEquals(new Vector2D(100,100), grassField.getRightUpperCorner());
+        assertEquals(new Vector2D(1,1), grassField.getCurrentBounds().leftLowerCorner());
+        assertEquals(new Vector2D(100,100), grassField.getCurrentBounds().rightUpperCorner());
     }
 
 
     @Test
-    public void move() {
+    public void move() throws PositionNotAvailableException, PositionOutOfBoundsException {
         /* Make test to move function from GrassField class. */
         /* Given */
         GrassField grassField = new GrassField(10);
@@ -120,7 +122,7 @@ class GrassFieldTest {
 
 
     @Test
-    public void isOccupied() {
+    public void isOccupied() throws PositionNotAvailableException, PositionOutOfBoundsException {
 
         /* Given */
         GrassField grassField = new GrassField(0);
@@ -148,7 +150,7 @@ class GrassFieldTest {
 
 
     @Test
-    public void getElements() {
+    public void getElements() throws PositionNotAvailableException, PositionOutOfBoundsException {
 
             /* Given */
             GrassField grassField = new GrassField(0);
@@ -173,7 +175,7 @@ class GrassFieldTest {
 
 
     @Test
-    public void objectAt() {
+    public void objectAt() throws PositionNotAvailableException, PositionOutOfBoundsException {
 
         /* Given */
         GrassField grassField = new GrassField(0);

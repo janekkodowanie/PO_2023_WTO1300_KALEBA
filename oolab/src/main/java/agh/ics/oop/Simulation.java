@@ -1,5 +1,7 @@
 package agh.ics.oop;
 
+import agh.ics.oop.exceptions.PositionNotAvailableException;
+import agh.ics.oop.exceptions.PositionOutOfBoundsException;
 import agh.ics.oop.model.*;
 
 import java.util.List;
@@ -20,30 +22,26 @@ public class Simulation {
 
     public void run() {
 
-        this.animals.forEach(this.worldMap::place);
+        this.animals.forEach(object -> {
+            try {
+                this.worldMap.place(object);
+            }
+            catch (PositionNotAvailableException ignored) {}
+        });
 
         if (this.worldMap.getElements().stream().noneMatch(element -> element instanceof Animal)) {
             throw new IllegalStateException("There is no animals to simulate!");
         }
 
-        MapVisualizer visualizer = new MapVisualizer(this.worldMap);
-
-        Vector2D upperRight = this.worldMap.getRightUpperCorner();
-        Vector2D lowerLeft = this.worldMap.getLeftLowerCorner();
-
-        System.out.println(visualizer.draw(lowerLeft, upperRight));
-
         for (int i = 0; i < this.moves.size(); i++) {
-
             Animal animal = this.animals.get(i % this.animals.size());
             MoveDirection direction = this.moves.get(i);
 
-            this.worldMap.move(animal, direction);
-
-            upperRight = this.worldMap.getRightUpperCorner();
-            lowerLeft = this.worldMap.getLeftLowerCorner();
-
-            System.out.println(visualizer.draw(lowerLeft, upperRight));
+            try {
+                this.worldMap.move(animal, direction);
+            } catch (PositionNotAvailableException | PositionOutOfBoundsException e) {
+                System.out.println(e.getMessage());
+            }
         }
     }
 
