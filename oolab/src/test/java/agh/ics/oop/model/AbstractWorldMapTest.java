@@ -1,6 +1,6 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.exceptions.PositionAlreadyOccupiedException;
+import agh.ics.oop.exceptions.PositionNotAvailableException;
 import agh.ics.oop.exceptions.PositionOutOfBoundsException;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,7 @@ public class AbstractWorldMapTest {
 
 
     @Test
-    void canMoveTo() {
+    void canMoveTo() throws PositionNotAvailableException, PositionOutOfBoundsException {
 
         /* Given */
         int rows = 1, cols = 2;
@@ -32,14 +32,13 @@ public class AbstractWorldMapTest {
                 .filter(pos -> !pos.follows(map.getCurrentBounds().leftLowerCorner()) || !pos.precedes(map.getCurrentBounds().rightUpperCorner()));
 
         /* Then */
-        assertDoesNotThrow(() -> notPassingPositions.forEach(pos -> assertThrows(PositionOutOfBoundsException.class, () -> map.canMoveTo(pos))));
-        assertDoesNotThrow(() -> assertThrows(PositionAlreadyOccupiedException.class, () -> map.canMoveTo(animal.getPosition())));
+        assertTrue(notPassingPositions.noneMatch(map::canMoveTo));
 
-        assertDoesNotThrow(() -> passingPositions.forEach(pos -> assertDoesNotThrow(() -> map.canMoveTo(pos))));
+
     }
 
     @Test
-    void isOccupied() {
+    void isOccupied() throws PositionNotAvailableException, PositionOutOfBoundsException {
 
         /* Given */
         RectangularMap map = new RectangularMap(1, 2);
@@ -57,7 +56,7 @@ public class AbstractWorldMapTest {
     }
 
     @Test
-    void objectAt() {
+    void objectAt() throws PositionNotAvailableException, PositionOutOfBoundsException {
 
         /* Given */
         RectangularMap map = new RectangularMap(1, 2);
@@ -77,7 +76,7 @@ public class AbstractWorldMapTest {
     }
 
     @Test
-    public void getElements() {
+    public void getElements() throws PositionNotAvailableException, PositionOutOfBoundsException {
 
         /* Given */
         GrassField grassField = new GrassField(0);

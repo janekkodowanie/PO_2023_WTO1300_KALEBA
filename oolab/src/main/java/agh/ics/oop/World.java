@@ -10,16 +10,22 @@ public class World {
     public static void main(String[] args) {
 
         /* f b r l f f r r f f f f f f f f */
-        List<MoveDirection> directions = OptionsParser.parse(args);
-        List<Vector2D> positions = List.of(new Vector2D(2,2), new Vector2D(3,4));
 
+        try {
+            List<MoveDirection> directions = OptionsParser.parse(args);
 
-        WorldMap<WorldElement, Vector2D> map = new GrassField(10);
+            List<Vector2D> positions = List.of(new Vector2D(2,2), new Vector2D(3,4));
 
-        ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay();
-        map.registerObserver(consoleMapDisplay);
+            WorldMap<WorldElement, Vector2D> map = new GrassField(10);
 
-        Simulation simulation = new Simulation(positions, directions, map);
-        simulation.run();
+            ConsoleMapDisplay consoleMapDisplay = new ConsoleMapDisplay();
+            map.registerObserver(consoleMapDisplay);
+
+            Simulation simulation = new Simulation(positions, directions, map);
+            simulation.run();
+        }
+        catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

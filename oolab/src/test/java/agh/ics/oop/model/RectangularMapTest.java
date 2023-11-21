@@ -1,5 +1,7 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.exceptions.PositionNotAvailableException;
+import agh.ics.oop.exceptions.PositionOutOfBoundsException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -7,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class RectangularMapTest {
 
     @Test
-    void place() {
+    void place() throws PositionNotAvailableException {
 
         /* Given */
         RectangularMap rectangularMap = new RectangularMap(1, 1);
@@ -21,10 +23,9 @@ class RectangularMapTest {
         /* When */
         rectangularMap.place(animal);
 
-        rectangularMap.place(animalDuplicate);
-
-
         /* Then */
+        assertThrows(PositionNotAvailableException.class, () -> rectangularMap.place(animalDuplicate));
+
         assert rectangularMap.getAnimalMap().size() == 1;
         assert !rectangularMap.getAnimalMap().containsValue(animalDuplicate);
 
@@ -33,7 +34,7 @@ class RectangularMapTest {
     }
 
     @Test
-    void move() {
+    void move() throws PositionNotAvailableException {
 
         /* Given */
         RectangularMap map = new RectangularMap(3, 3);
@@ -59,19 +60,19 @@ class RectangularMapTest {
 
         /* Move into occupied position -> no changes should be made. */
         map.move(centralAnimal, MoveDirection.LEFT);
-        map.move(centralAnimal, MoveDirection.FORWARD);
+        assertThrows(PositionNotAvailableException.class, () -> map.move(centralAnimal, MoveDirection.FORWARD));
         assertTrue(map.isOccupied(leftLowerCorner));
         assertTrue(map.isOccupied(newPosition));
         assertEquals(map.getAnimalMap().get(newPosition), centralAnimal);
         assertEquals(map.getAnimalMap().get(leftLowerCorner), leftLowerCornerAnimal);
 
         /* Moves beyond map limits -> no changes should be made. */
-        map.move(leftLowerCornerAnimal, MoveDirection.BACKWARD);
+        assertThrows(PositionNotAvailableException.class, () -> map.move(leftLowerCornerAnimal, MoveDirection.BACKWARD));
         assertTrue(map.isOccupied(leftLowerCorner));
         assertEquals(map.getAnimalMap().get(leftLowerCorner), leftLowerCornerAnimal);
 
         map.move(leftLowerCornerAnimal, MoveDirection.LEFT);
-        map.move(leftLowerCornerAnimal, MoveDirection.FORWARD);
+        assertThrows(PositionNotAvailableException.class, () -> map.move(leftLowerCornerAnimal, MoveDirection.FORWARD));
         assertTrue(map.isOccupied(leftLowerCorner));
         assertEquals(map.getAnimalMap().get(leftLowerCorner), leftLowerCornerAnimal);
     }

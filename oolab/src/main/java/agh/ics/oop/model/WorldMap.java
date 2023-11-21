@@ -1,5 +1,8 @@
 package agh.ics.oop.model;
 
+import agh.ics.oop.exceptions.PositionNotAvailableException;
+import agh.ics.oop.exceptions.PositionOutOfBoundsException;
+
 import java.util.List;
 
 /**
@@ -14,13 +17,13 @@ public interface WorldMap<T, P> extends MoveValidator<P> {
     /**
      * Place a T object on the map.
      */
-    void place(T object);
+    void place(T object) throws PositionNotAvailableException;
 
     /**
      * Moves an animal (if it is present on the map) according to specified direction.
      * If the move is not possible, this method has no effect.
      */
-    void move(T object, MoveDirection direction);
+    void move(T object, MoveDirection direction) throws PositionNotAvailableException, PositionOutOfBoundsException;
 
     /**
      * Return true if given position on the map is occupied. Should not be
@@ -42,10 +45,8 @@ public interface WorldMap<T, P> extends MoveValidator<P> {
 
     List<WorldElement> getElements();
 
-    Boundary getCurrentBounds();
-
     void registerObserver(MapChangeListener observer);
-    void removeObserver(MapChangeListener observer);
+    void unregisterObserver(MapChangeListener observer);
 
 
 }

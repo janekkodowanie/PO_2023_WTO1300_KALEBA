@@ -1,6 +1,6 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.exceptions.PositionAlreadyOccupiedException;
+import agh.ics.oop.exceptions.PositionNotAvailableException;
 import agh.ics.oop.exceptions.PositionOutOfBoundsException;
 
 public class Animal implements WorldElement {
@@ -26,7 +26,7 @@ public class Animal implements WorldElement {
         return this.position.equals(position);
     }
 
-    boolean move(MoveValidator<Vector2D> validator, MoveDirection direction) throws PositionAlreadyOccupiedException, PositionOutOfBoundsException {
+    boolean move(MoveValidator<Vector2D> validator, MoveDirection direction) throws PositionNotAvailableException {
         Vector2D oldPosition = this.position;
         MapDirection orientation = this.orientation;
 

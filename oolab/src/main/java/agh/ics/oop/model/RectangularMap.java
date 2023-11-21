@@ -1,16 +1,17 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.exceptions.PositionAlreadyOccupiedException;
-import agh.ics.oop.exceptions.PositionOutOfBoundsException;
+import agh.ics.oop.exceptions.PositionNotAvailableException;
 
 import java.util.Collections;
 import java.util.Map;
 
 public class RectangularMap extends AbstractWorldMap {
 
+    private final Boundary boundary;
+
     public RectangularMap(int width, int height) {
-        super(new Vector2D(0, 0),
-                new Vector2D(width - 1, height - 1), width * height);
+        super(width * height);
+        this.boundary = new Boundary(new Vector2D(0, 0), new Vector2D(width - 1, height - 1));
     }
 
     Map<Vector2D, Animal> getAnimalMap() {
@@ -18,43 +19,29 @@ public class RectangularMap extends AbstractWorldMap {
     }
 
     @Override
-    public void place(WorldElement worldElement) {
-        try {
-            if (worldElement instanceof Animal animal) {
-                Vector2D position = animal.getPosition();
-                if (super.canMoveTo(position)) {
-                    animalMap.put(position, animal);
-
-                    mapChanged("Animal placed at " + position + ".");
-                }
-            }
-        }
-        catch (PositionAlreadyOccupiedException | PositionOutOfBoundsException e) {
-            System.out.println(e.getMessage());
-        }
+    public void place(WorldElement worldElement) throws PositionNotAvailableException {
+        super.place(worldElement);
+        mapChanged("Animal placed at " + worldElement.getPosition() + ".");
     }
 
     @Override
-    public void move(WorldElement element, MoveDirection direction) {
+    protected boolean inBounds(Vector2D newPosition) {
+        return newPosition.follows(this.boundary.leftLowerCorner()) && newPosition.precedes(this.boundary.rightUpperCorner());
+    }
 
-        try {
-            Animal animal = (Animal) element;
-            Vector2D oldPosition = animal.getPosition();
+    @Override
+    public void move(WorldElement element, MoveDirection direction) throws PositionNotAvailableException {
+        Vector2D oldPosition = element.getPosition();
+        String oldOrientation = element.toString();
 
-            if (animal.move(this, direction)) {
-                this.animalMap.remove(oldPosition);
-                this.animalMap.put(animal.getPosition(), animal);
-            }
+        super.move(element, direction);
+        Animal animal = (Animal) element;
 
-            super.mapChanged("Animal moved from " + oldPosition + " " + animal + " to " + animal.getPosition());
-        }
-        catch (PositionAlreadyOccupiedException | PositionOutOfBoundsException e) {
-            System.out.println(e.getMessage());
-        }
+        super.mapChanged("Animal moved from " + oldPosition + " " + animal + " to " + animal.getPosition() + " " + oldOrientation);
     }
 
     @Override
     public Boundary getCurrentBounds() {
-        return super.mapLimits;
+        return this.boundary;
     }
 }

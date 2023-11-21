@@ -2,8 +2,7 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.MapVisualizer;
 import agh.ics.oop.annotations.Observable;
-import agh.ics.oop.exceptions.PositionAlreadyOccupiedException;
-import agh.ics.oop.exceptions.PositionOutOfBoundsException;
+import agh.ics.oop.exceptions.PositionNotAvailableException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,14 +13,10 @@ import java.util.Map;
 public abstract class AbstractWorldMap implements WorldMap<WorldElement, Vector2D> {
 
     protected final Map<Vector2D, Animal> animalMap;
-
-    /* Not exceedable map boundaries. */
-    protected final Boundary mapLimits;
     protected final MapVisualizer visualizer;
     private List<MapChangeListener> observers;
 
-    protected AbstractWorldMap(Vector2D leftLowerCorner, Vector2D rightUpperCorner, int initialCapacity) {
-        this.mapLimits = new Boundary(leftLowerCorner, rightUpperCorner);
+    protected AbstractWorldMap(int initialCapacity) {
         animalMap = new HashMap<>(initialCapacity);
 
         visualizer = new MapVisualizer(this);
@@ -33,37 +28,42 @@ public abstract class AbstractWorldMap implements WorldMap<WorldElement, Vector2
         return animalMap.get(position);
     }
 
-    protected boolean inBounds(Vector2D newPosition) {
-        return newPosition.follows(this.mapLimits.leftLowerCorner()) && newPosition.precedes(this.mapLimits.rightUpperCorner());
+    protected abstract boolean inBounds(Vector2D newPosition);
+
+    @Override
+    public boolean canMoveTo(Vector2D newPosition) {
+        return inBounds(newPosition) && !this.isOccupied(newPosition);
     }
 
     @Override
-    public boolean canMoveTo(Vector2D newPosition) throws PositionOutOfBoundsException, PositionAlreadyOccupiedException {
-        if (!inBounds(newPosition))
-            throw new PositionOutOfBoundsException(newPosition);
-
-        if (this.isOccupied(newPosition))
-            throw new PositionAlreadyOccupiedException(newPosition);
-
-        return true;
-    }
-
-    @Override
-    public void move(WorldElement element, MoveDirection direction) {
-
-        try {
-            if (element instanceof Animal animal) {
-                Vector2D oldPosition = animal.getPosition();
-
-                if (animal.move(this, direction)) {
-                    this.animalMap.remove(oldPosition);
-                    this.animalMap.put(animal.getPosition(), animal);
-                }
-                this.mapChanged("Animal moved from " + oldPosition + " " + animal + " to " + animal.getPosition());
+    public void place(WorldElement worldElement) throws PositionNotAvailableException {
+        if (worldElement instanceof Animal animal) {
+            Vector2D position = animal.getPosition();
+            if (canMoveTo(position)) {
+                animalMap.put(position, animal);
+            }
+            else {
+                throw new PositionNotAvailableException(position);
             }
         }
-        catch (PositionAlreadyOccupiedException | PositionOutOfBoundsException e) {
-            System.out.println(e.getMessage());
+    }
+
+    @Override
+    public void move(WorldElement element, MoveDirection direction) throws PositionNotAvailableException {
+
+        if (element instanceof Animal animal) {
+            Vector2D oldPosition = animal.getPosition();
+
+            if (animal.move(this, direction)) {
+                this.animalMap.remove(oldPosition);
+                this.animalMap.put(animal.getPosition(), animal);
+            }
+            else {
+                throw new PositionNotAvailableException(animal.getPosition());
+            }
+        }
+        else {
+            throw new IllegalArgumentException("Only animals can move on the map!");
         }
     }
 
@@ -87,7 +87,7 @@ public abstract class AbstractWorldMap implements WorldMap<WorldElement, Vector2
         observers.add(observer);
     }
 
-    public void removeObserver(MapChangeListener observer) {
+    public void unregisterObserver(MapChangeListener observer) {
         observers.remove(observer);
     }
 
@@ -96,4 +96,5 @@ public abstract class AbstractWorldMap implements WorldMap<WorldElement, Vector2
             observer.mapChanged(this, message);
         }
     }
+
 }

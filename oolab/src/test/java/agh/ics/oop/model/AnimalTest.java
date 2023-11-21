@@ -1,6 +1,6 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.exceptions.PositionAlreadyOccupiedException;
+import agh.ics.oop.exceptions.PositionNotAvailableException;
 import agh.ics.oop.exceptions.PositionOutOfBoundsException;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ class AnimalTest {
     }
 
     @Test
-    public void move() throws PositionAlreadyOccupiedException, PositionOutOfBoundsException {
+    public void move() throws PositionNotAvailableException, PositionOutOfBoundsException {
 
         /* Given */
         Animal animal = new Animal();

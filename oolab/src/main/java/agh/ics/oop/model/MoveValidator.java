@@ -1,6 +1,6 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.exceptions.PositionAlreadyOccupiedException;
+import agh.ics.oop.exceptions.PositionNotAvailableException;
 import agh.ics.oop.exceptions.PositionOutOfBoundsException;
 
 public interface MoveValidator<P> {
@@ -12,5 +12,5 @@ public interface MoveValidator<P> {
      *            The position checked for the movement possibility.
      * @return True if the object can move to that position.
      */
-    boolean canMoveTo(P position) throws PositionOutOfBoundsException, PositionAlreadyOccupiedException;
+    boolean canMoveTo(P position) throws PositionNotAvailableException;
 }

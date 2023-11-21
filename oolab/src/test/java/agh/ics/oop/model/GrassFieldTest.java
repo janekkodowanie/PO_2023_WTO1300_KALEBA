@@ -1,6 +1,8 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.MapVisualizer;
+import agh.ics.oop.exceptions.PositionNotAvailableException;
+import agh.ics.oop.exceptions.PositionOutOfBoundsException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -33,10 +35,10 @@ class GrassFieldTest {
 
 
     @Test
-    public void place() {
+    public void place() throws PositionNotAvailableException, PositionOutOfBoundsException {
 
         /* Given */
-        GrassField grassField = new GrassField(10);
+        GrassField grassField = new GrassField(0);
         Animal animalTrue = new Animal(new Vector2D(2,2));
         Animal highCoords = new Animal(new Vector2D(100,100));
 
@@ -50,7 +52,7 @@ class GrassFieldTest {
 
         /* Then */
         assertEquals(animalTrue, grassField.objectAt(new Vector2D(2,2)));
-        grassField.place(grassFalse);
+        assertThrows(PositionNotAvailableException.class, () -> grassField.place(grassFalse));
 
         assertTrue(grassField.isOccupied(new Vector2D(3,3)));
 
@@ -64,7 +66,7 @@ class GrassFieldTest {
 
 
     @Test
-    public void updateVisibleCorners() {
+    public void updateVisibleCorners() throws PositionNotAvailableException, PositionOutOfBoundsException {
 
         /* Given */
         GrassField grassField = new GrassField(0);
@@ -90,7 +92,7 @@ class GrassFieldTest {
 
 
     @Test
-    public void move() {
+    public void move() throws PositionNotAvailableException, PositionOutOfBoundsException {
         /* Make test to move function from GrassField class. */
         /* Given */
         GrassField grassField = new GrassField(10);
@@ -120,7 +122,7 @@ class GrassFieldTest {
 
 
     @Test
-    public void isOccupied() {
+    public void isOccupied() throws PositionNotAvailableException, PositionOutOfBoundsException {
 
         /* Given */
         GrassField grassField = new GrassField(0);
@@ -148,7 +150,7 @@ class GrassFieldTest {
 
 
     @Test
-    public void getElements() {
+    public void getElements() throws PositionNotAvailableException, PositionOutOfBoundsException {
 
             /* Given */
             GrassField grassField = new GrassField(0);
@@ -173,7 +175,7 @@ class GrassFieldTest {
 
 
     @Test
-    public void objectAt() {
+    public void objectAt() throws PositionNotAvailableException, PositionOutOfBoundsException {
 
         /* Given */
         GrassField grassField = new GrassField(0);

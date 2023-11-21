@@ -1,6 +1,6 @@
 package agh.ics.oop.model;
 
-import agh.ics.oop.exceptions.PositionAlreadyOccupiedException;
+import agh.ics.oop.exceptions.PositionNotAvailableException;
 import agh.ics.oop.exceptions.PositionOutOfBoundsException;
 
 import java.util.HashMap;
@@ -10,6 +10,7 @@ import java.util.Map;
 public class GrassField extends AbstractWorldMap {
     
     private final int grassNumber;
+    private final Boundary mapLimits;
     private final Map<Vector2D, Grass> grassMap;
 
     /* currentBounds ->
@@ -20,11 +21,11 @@ public class GrassField extends AbstractWorldMap {
 
     public GrassField(int grassNumber) {
 
-        super(new Vector2D(Integer.MIN_VALUE, Integer.MIN_VALUE),
-                new Vector2D(Integer.MAX_VALUE, Integer.MAX_VALUE), 0);
+        super(0);
 
         this.grassNumber = grassNumber;
-        this.currentBounds = new Boundary(super.mapLimits.rightUpperCorner(), super.mapLimits.leftLowerCorner());
+        this.mapLimits = new Boundary(new Vector2D(Integer.MIN_VALUE, Integer.MIN_VALUE), new Vector2D(Integer.MAX_VALUE, Integer.MAX_VALUE));
+        this.currentBounds = new Boundary(mapLimits.rightUpperCorner(), mapLimits.leftLowerCorner());
 
         grassMap = new HashMap<>(grassNumber);
 
@@ -53,95 +54,56 @@ public class GrassField extends AbstractWorldMap {
     }
 
     @Override
-    public void place(WorldElement object) {
+    public void place(WorldElement worldElement) throws PositionNotAvailableException {
 
-        if (object instanceof Animal animal) {
-            try {
-                this.placeAnimal(animal);
-                super.mapChanged("Animal placed at " + animal.getPosition() + ".");
-
-            } catch (PositionAlreadyOccupiedException | PositionOutOfBoundsException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        else if (object instanceof Grass grass) {
-            try {
-                this.placeGrass(grass);
-                super.mapChanged("Grass placed at " + grass.getPosition() + ".");
-
-            } catch (PositionAlreadyOccupiedException | PositionOutOfBoundsException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    private boolean canPlaceGrass(Vector2D newPosition) throws PositionOutOfBoundsException, PositionAlreadyOccupiedException {
-
-        if (!super.inBounds(newPosition))
-            throw new PositionOutOfBoundsException(newPosition);
-
-        if (this.isOccupied(newPosition))
-            throw new PositionAlreadyOccupiedException(newPosition);
-
-        return true;
-    }
-
-    public void placeAnimal(Animal animal) throws PositionAlreadyOccupiedException, PositionOutOfBoundsException {
-        if (this.canMoveTo(animal.getPosition())) {
-            animalMap.put(animal.getPosition(), animal);
-            grassMap.remove(animal.getPosition());
+        if (worldElement instanceof Animal animal) {
+            super.place(animal);
             this.updateGrassField(animal.getPosition());
+            super.mapChanged("Animal placed at " + animal.getPosition() + ".");
         }
+
+        else if (worldElement instanceof Grass grass) {
+            this.placeGrass(grass);
+            super.mapChanged("Grass placed at " + grass.getPosition() + ".");
+        }
+
     }
 
-    public void placeGrass(Grass grass) throws PositionAlreadyOccupiedException, PositionOutOfBoundsException {
+    public void placeGrass(Grass grass) throws PositionNotAvailableException {
         if (this.canPlaceGrass(grass.getPosition())) {
             grassMap.put(grass.getPosition(), grass);
             this.updateGrassField(grass.getPosition());
         }
+        else {
+            throw new PositionNotAvailableException(grass.getPosition());
+        }
+    }
+
+    private boolean canPlaceGrass(Vector2D newPosition) {
+        return inBounds(newPosition) && !this.isOccupied(newPosition);
     }
 
     private void updateGrassField(Vector2D position) {
         this.updateVisibleCorners(position);
     }
-    private void removeGrass(Vector2D position) {
-        grassMap.remove(position);
-    }
-
 
     @Override
-    public void move(WorldElement element, MoveDirection direction) {
-        /* After super.move() element.getPosition() returns it's new Position. */
+    public void move(WorldElement element, MoveDirection direction) throws PositionNotAvailableException {
+        Vector2D oldPosition = element.getPosition();
+        String oldOrientation = element.toString();
 
-        if (element instanceof Animal animal) {
-            try {
-                Vector2D oldPosition = animal.getPosition();
+        super.move(element, direction);
 
-                if (animal.move(this, direction)) {
-                    this.animalMap.remove(oldPosition);
-                    this.animalMap.put(animal.getPosition(), animal);
-                    this.removeGrass(animal.getPosition());
-                    this.updateGrassField(animal.getPosition());
-                    super.mapChanged("Animal moved from " + oldPosition + " " + animal + " to " + animal.getPosition());
-                }
+        Animal animal = (Animal) element;
 
-            } catch (PositionAlreadyOccupiedException | PositionOutOfBoundsException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-        else {
-            throw new IllegalArgumentException("Only animals can move on the map!");
-        }
+        this.updateGrassField(animal.getPosition());
+
+        super.mapChanged("Animal moved from " + oldPosition + " " + animal + " to " + animal.getPosition() + " " + oldOrientation);
     }
 
     @Override
-    public boolean canMoveTo(Vector2D newPosition) throws PositionAlreadyOccupiedException {
-
-        if (this.isOccupiedByAnimal(newPosition))
-            throw new PositionAlreadyOccupiedException(newPosition);
-
-        return super.inBounds(newPosition);
+    public boolean canMoveTo(Vector2D newPosition) {
+        return inBounds(newPosition) && !this.isOccupiedByAnimal(newPosition);
     }
 
     @Override
@@ -169,6 +131,10 @@ public class GrassField extends AbstractWorldMap {
     @Override
     public Boundary getCurrentBounds() {
         return currentBounds;
+    }
+
+    public boolean inBounds(Vector2D newPosition) {
+        return newPosition.follows(this.mapLimits.leftLowerCorner()) && newPosition.precedes(this.mapLimits.rightUpperCorner());
     }
 
 }
