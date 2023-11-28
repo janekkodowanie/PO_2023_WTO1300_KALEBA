@@ -1,7 +1,6 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.exceptions.PositionNotAvailableException;
-import agh.ics.oop.exceptions.PositionOutOfBoundsException;
 
 public class Animal implements WorldElement {
     private static final Vector2D defaultPosition = new Vector2D(2,2);

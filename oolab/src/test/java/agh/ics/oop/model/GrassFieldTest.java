@@ -2,7 +2,6 @@ package agh.ics.oop.model;
 
 import agh.ics.oop.MapVisualizer;
 import agh.ics.oop.exceptions.PositionNotAvailableException;
-import agh.ics.oop.exceptions.PositionOutOfBoundsException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,7 +34,7 @@ class GrassFieldTest {
 
 
     @Test
-    public void place() throws PositionNotAvailableException, PositionOutOfBoundsException {
+    public void place() throws PositionNotAvailableException {
 
         /* Given */
         GrassField grassField = new GrassField(0);
@@ -66,7 +65,7 @@ class GrassFieldTest {
 
 
     @Test
-    public void updateVisibleCorners() throws PositionNotAvailableException, PositionOutOfBoundsException {
+    public void updateVisibleCorners() throws PositionNotAvailableException {
 
         /* Given */
         GrassField grassField = new GrassField(0);
@@ -92,7 +91,7 @@ class GrassFieldTest {
 
 
     @Test
-    public void move() throws PositionNotAvailableException, PositionOutOfBoundsException {
+    public void move() throws PositionNotAvailableException {
         /* Make test to move function from GrassField class. */
         /* Given */
         GrassField grassField = new GrassField(10);
@@ -122,7 +121,7 @@ class GrassFieldTest {
 
 
     @Test
-    public void isOccupied() throws PositionNotAvailableException, PositionOutOfBoundsException {
+    public void isOccupied() throws PositionNotAvailableException {
 
         /* Given */
         GrassField grassField = new GrassField(0);
@@ -150,7 +149,7 @@ class GrassFieldTest {
 
 
     @Test
-    public void getElements() throws PositionNotAvailableException, PositionOutOfBoundsException {
+    public void getElements() throws PositionNotAvailableException {
 
             /* Given */
             GrassField grassField = new GrassField(0);
@@ -175,7 +174,7 @@ class GrassFieldTest {
 
 
     @Test
-    public void objectAt() throws PositionNotAvailableException, PositionOutOfBoundsException {
+    public void objectAt() throws PositionNotAvailableException {
 
         /* Given */
         GrassField grassField = new GrassField(0);

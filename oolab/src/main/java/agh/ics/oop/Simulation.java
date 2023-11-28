@@ -1,12 +1,11 @@
 package agh.ics.oop;
 
 import agh.ics.oop.exceptions.PositionNotAvailableException;
-import agh.ics.oop.exceptions.PositionOutOfBoundsException;
 import agh.ics.oop.model.*;
 
 import java.util.List;
 
-public class Simulation {
+public class Simulation implements Runnable {
 
     private final List<Animal> animals;
 
@@ -39,7 +38,7 @@ public class Simulation {
 
             try {
                 this.worldMap.move(animal, direction);
-            } catch (PositionNotAvailableException | PositionOutOfBoundsException e) {
+            } catch (PositionNotAvailableException e) {
                 System.out.println(e.getMessage());
             }
         }

@@ -4,23 +4,29 @@ import agh.ics.oop.MapVisualizer;
 import agh.ics.oop.annotations.Observable;
 import agh.ics.oop.exceptions.PositionNotAvailableException;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Observable
 public abstract class AbstractWorldMap implements WorldMap<WorldElement, Vector2D> {
 
+    protected final UUID ID;
     protected final Map<Vector2D, Animal> animalMap;
     protected final MapVisualizer visualizer;
     private List<MapChangeListener> observers;
+
 
     protected AbstractWorldMap(int initialCapacity) {
         animalMap = new HashMap<>(initialCapacity);
 
         visualizer = new MapVisualizer(this);
         observers = new ArrayList<>();
+
+        ID = UUID.randomUUID();
+    }
+
+    @Override
+    public UUID getID() {
+        return this.ID;
     }
 
     @Override
