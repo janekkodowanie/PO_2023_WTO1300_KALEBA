@@ -1,7 +1,6 @@
-package agh.ics.oop.model;
+package agh.ics.oop;
 
-import agh.ics.oop.Simulation;
-
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -16,12 +15,11 @@ public class SimulationEngine {
 
     private final List<Thread> threads;
 
-    private final ExecutorService executorService;
+    private ExecutorService executorService;
 
     public SimulationEngine(Collection<Simulation> simulations) {
         this.simulations = simulations;
-        this.executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
-        threads = simulations.stream().map(Thread::new).toList();
+        this.threads = new ArrayList<>();
     }
 
     public void runSync() {
@@ -31,32 +29,31 @@ public class SimulationEngine {
     }
 
     public void runAsync() {
-        for (Thread thread : threads) {
-            thread.start();
+        for (Simulation simulation : simulations) {
+            Thread thread = new Thread(simulation);
+            threads.add(thread);
         }
     }
 
     public void runAsyncInThreadPool() {
-        for (Thread thread : threads) {
-            executorService.submit(thread);
+        this.executorService = Executors.newFixedThreadPool(THREAD_POOL_SIZE);
+
+        for (Simulation simulation : simulations) {
+            executorService.submit(simulation);
         }
     }
 
     public void awaitSimulationsEnd() {
-        for (Thread thread : threads) {
-            try {
-                thread.join();
-            } catch (InterruptedException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        executorService.shutdown();
-
         try {
+            for (Thread thread : threads) {
+                thread.join();
+            }
+            executorService.shutdown();
+
             if (!executorService.awaitTermination(10, TimeUnit.SECONDS)) {
                 executorService.shutdownNow();
             }
+
         } catch (InterruptedException e) {
             System.out.println(e.getMessage());
         }
