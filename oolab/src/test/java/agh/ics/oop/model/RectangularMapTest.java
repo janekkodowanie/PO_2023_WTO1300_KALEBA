@@ -1,7 +1,6 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.exceptions.PositionNotAvailableException;
-import agh.ics.oop.exceptions.PositionOutOfBoundsException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;

@@ -1,7 +1,6 @@
 package agh.ics.oop.model;
 
 import agh.ics.oop.exceptions.PositionNotAvailableException;
-import agh.ics.oop.exceptions.PositionOutOfBoundsException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -13,7 +12,7 @@ public class AbstractWorldMapTest {
 
 
     @Test
-    void canMoveTo() throws PositionNotAvailableException, PositionOutOfBoundsException {
+    void canMoveTo() throws PositionNotAvailableException {
 
         /* Given */
         int rows = 1, cols = 2;
@@ -38,7 +37,7 @@ public class AbstractWorldMapTest {
     }
 
     @Test
-    void isOccupied() throws PositionNotAvailableException, PositionOutOfBoundsException {
+    void isOccupied() throws PositionNotAvailableException {
 
         /* Given */
         RectangularMap map = new RectangularMap(1, 2);
@@ -56,7 +55,7 @@ public class AbstractWorldMapTest {
     }
 
     @Test
-    void objectAt() throws PositionNotAvailableException, PositionOutOfBoundsException {
+    void objectAt() throws PositionNotAvailableException {
 
         /* Given */
         RectangularMap map = new RectangularMap(1, 2);
@@ -76,7 +75,7 @@ public class AbstractWorldMapTest {
     }
 
     @Test
-    public void getElements() throws PositionNotAvailableException, PositionOutOfBoundsException {
+    public void getElements() throws PositionNotAvailableException {
 
         /* Given */
         GrassField grassField = new GrassField(0);

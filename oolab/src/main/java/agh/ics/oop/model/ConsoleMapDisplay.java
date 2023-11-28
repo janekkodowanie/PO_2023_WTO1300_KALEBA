@@ -12,11 +12,14 @@ public class ConsoleMapDisplay implements MapChangeListener {
     }
 
     @Override
-    public void mapChanged(WorldMap<WorldElement, Vector2D> worldMap, String message) {
-        System.out.println("####################################");
-        System.out.println(message);
-        System.out.println(worldMap);
-        System.out.println("Change counter: " + ++this.changeCounter);
-        System.out.println("\n\n");
+    public synchronized void mapChanged(WorldMap<WorldElement, Vector2D> worldMap, String message) {
+
+        String view = "####################################\n" +
+                worldMap.getID() + "\n" +
+                message + "\n" +
+                worldMap +
+                "Change counter: " + ++this.changeCounter + "\n\n\n";
+
+        System.out.println(view);
     }
 }
