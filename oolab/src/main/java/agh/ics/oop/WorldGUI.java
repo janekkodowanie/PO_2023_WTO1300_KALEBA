@@ -1,7 +1,6 @@
 package agh.ics.oop;
 
 import javafx.application.Application;
-import javafx.application.Platform;
 
 public class WorldGUI {
     public static void main(String[] args) {

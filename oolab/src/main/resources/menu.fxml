@@ -1,10 +1,9 @@
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <BorderPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
@@ -12,7 +11,6 @@
             fx:controller="agh.ics.oop.presenter.MenuPresenter">
     <center>
         <HBox>
-            <!-- Your existing VBox for other controls -->
             <VBox spacing="10">
                 <HBox spacing="10">
                     <Label text="Movement List:"/>

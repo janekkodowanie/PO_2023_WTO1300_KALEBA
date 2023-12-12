@@ -35,6 +35,18 @@ public class SimulationPresenter implements MapChangeListener {
     void drawMap() {
         clearGrid();
 
+        writeAxis();
+
+        writeObjects();
+    }
+
+    private void clearGrid() {
+        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
+        mapGrid.getColumnConstraints().clear();
+        mapGrid.getRowConstraints().clear();
+    }
+
+    private void writeAxis() {
         Boundary boundary = worldMap.getCurrentBounds();
 
         Label mainLabel = new Label("y/x");
@@ -59,14 +71,16 @@ public class SimulationPresenter implements MapChangeListener {
             mapGrid.getRowConstraints().add(new RowConstraints(CELL_HEIGHT));
             GridPane.setHalignment(label, HPos.CENTER);
         }
+    }
 
+    private void writeObjects() {
+        Boundary boundary = worldMap.getCurrentBounds();
 
         for (WorldElement element : worldMap.getElements()) {
             Vector2D position = element.getPosition();
 
             Label label = new Label(element.toString());
             GridPane.setHalignment(label, HPos.CENTER);
-
 
             /*
                 Elements list = animalList.concat(grassList).
@@ -78,12 +92,5 @@ public class SimulationPresenter implements MapChangeListener {
                 mapGrid.add(label, position.getX() - boundary.leftLowerCorner().getX() + 1, boundary.rightUpperCorner().getY() - position.getY() + 1, 1, 1);
             }
         }
-
-    }
-
-    private void clearGrid() {
-        mapGrid.getChildren().retainAll(mapGrid.getChildren().get(0)); // hack to retain visible grid lines
-        mapGrid.getColumnConstraints().clear();
-        mapGrid.getRowConstraints().clear();
     }
 }

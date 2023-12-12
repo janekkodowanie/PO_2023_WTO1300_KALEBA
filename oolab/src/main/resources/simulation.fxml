@@ -5,19 +5,16 @@
             xmlns:fx="http://javafx.com/fxml"
             minHeight="700.0" minWidth="900.0"
             fx:controller="agh.ics.oop.presenter.SimulationPresenter">
-    <center>
-        <HBox>
-            <!-- Your existing VBox for other controls -->
-            <VBox spacing="10" HBox.hgrow="NEVER">
-                <HBox spacing="10">
-                    <Label fx:id="movementDescriptionLabel" text="Movement Description:"/>
-                </HBox>
-            </VBox>
 
-            <!-- New GridPane for displaying the map -->
-            <VBox alignment="CENTER" HBox.hgrow="ALWAYS">
-                <GridPane fx:id="mapGrid" gridLinesVisible="true"/>
-            </VBox>
+    <top>
+        <HBox>
+            <Label fx:id="movementDescriptionLabel" text="Movement Description:"/>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox alignment="CENTER">
+            <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true"/>
         </HBox>
     </center>
 </BorderPane>
