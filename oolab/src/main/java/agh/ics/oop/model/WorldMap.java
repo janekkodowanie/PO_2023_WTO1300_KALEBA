@@ -52,6 +52,6 @@ public interface WorldMap<T, P> extends MoveValidator<P> {
 
 
 
-
+    Boundary getCurrentBounds();
 
 }
