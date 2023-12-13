@@ -1,0 +1,20 @@
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            minHeight="700.0" minWidth="900.0"
+            fx:controller="agh.ics.oop.presenter.SimulationPresenter">
+
+    <top>
+        <HBox>
+            <Label fx:id="movementDescriptionLabel" text="Movement Description:"/>
+        </HBox>
+    </top>
+
+    <center>
+        <HBox alignment="CENTER">
+            <GridPane fx:id="mapGrid" alignment="CENTER" gridLinesVisible="true"/>
+        </HBox>
+    </center>
+</BorderPane>
